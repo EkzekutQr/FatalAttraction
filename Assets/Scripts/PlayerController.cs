@@ -17,9 +17,21 @@ public class PlayerController : MonoBehaviour
     private bool _isGrounded;
     Rigidbody rb;
 
+    BaseHit currentAbility;
+
     // Start is called before the first frame update
     void Start()
     {
+        if(currentAbility == null)
+        {
+            currentAbility = new FatalAttraction();
+
+            //if(new FatalAttraction() is BaseHit)
+            //currentAbility = new FatalAttraction();
+        }
+
+        //Debug.Log(currentAbility.GetType().Name);
+
         rb = GetComponent<Rigidbody>();
     }
 
@@ -51,12 +63,16 @@ public class PlayerController : MonoBehaviour
         {
             if (moveHorizontal != 1 && moveHorizontal < 1)
                 moveHorizontal = moveHorizontal + accelerate;   //Плавное ускорение движения
+
+            gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
         }
 
         else if (Input.GetKey(KeyCode.A))                       //Движение влево
         {
             if (moveHorizontal != -1 && moveHorizontal > -1)
                 moveHorizontal = moveHorizontal - accelerate;   //Плавное ускорение движения
+
+            gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
         }
 
         else
@@ -76,12 +92,16 @@ public class PlayerController : MonoBehaviour
         {
             if (moveVertical != 1 && moveVertical < 1)
                 moveVertical = moveVertical + accelerate;
+
+            gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
         }
 
         else if (Input.GetKey(KeyCode.S))
         {
             if (moveVertical != -1 && moveVertical > -1)
                 moveVertical = moveVertical - accelerate;
+
+            gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
         }
 
         else
@@ -93,6 +113,7 @@ public class PlayerController : MonoBehaviour
         //Движение в направление вектора
 
         rb.velocity = new Vector3(moveHorizontal * speed, rb.velocity.y, moveVertical * speed);
+
     }
 
     private void JumpLogic()
@@ -130,21 +151,21 @@ public class PlayerController : MonoBehaviour
         {
             case "FatalAttraction":
 
-                gameObject.AddComponent<FatalAttraction>();
+                Destroy(gameObject.GetComponent(currentAbility.GetType()));
 
-                Destroy(gameObject.GetComponent<Cyclone>());
+                currentAbility = new FatalAttraction();
 
-                Debug.Log("FA");
+                gameObject.AddComponent(currentAbility.GetType());
 
                 break;
 
-            case "BaseHit":
+            case "Cyclone":
 
-                gameObject.AddComponent<Cyclone>();
+                Destroy(gameObject.GetComponent(currentAbility.GetType()));
 
-                Destroy(gameObject.GetComponent<FatalAttraction>());
+                currentAbility = new Cyclone();
 
-                Debug.Log("BH");
+                gameObject.AddComponent(currentAbility.GetType());
 
                 break;
         }

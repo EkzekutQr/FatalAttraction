@@ -53,14 +53,16 @@
     <UnityVersion>2020.3.25f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\Resources\AbilityIcon.cs" />
     <Compile Include="Assets\Scripts\Ability\BaseHit.cs" />
     <Compile Include="Assets\Scripts\PlayerController.cs" />
-    <Compile Include="Assets\Scripts\HP.cs" />
     <Compile Include="Assets\Scripts\Ability\FatalAttraction.cs" />
-    <Compile Include="Assets\Scripts\CameraTracking.cs" />
-    <Compile Include="Assets\Resources\AbilityIcon.cs" />
     <Compile Include="Assets\Scripts\PlayerAbilitySelector.cs" />
     <Compile Include="Assets\Scripts\Ability\Cyclone.cs" />
+    <Compile Include="Assets\Scripts\HP.cs" />
+    <Compile Include="Assets\Scripts\CameraTracking.cs" />
+    <Compile Include="Assets\Scripts\AttrackZone.cs" />
+    <Compile Include="Assets\Scripts\BlinkDistance.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

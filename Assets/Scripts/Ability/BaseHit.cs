@@ -12,7 +12,7 @@ public abstract class BaseHit : MonoBehaviour
     protected float hitDelay;
 
     [SerializeField]
-    protected List<Collider> colliders;
+    protected List<Collider> attackZoneColliders;
 
     [SerializeField]
     protected bool canHit = true;
@@ -24,24 +24,25 @@ public abstract class BaseHit : MonoBehaviour
     protected GameObject attackZone;
 
 
+
     virtual protected void Start()
     {
         damage = 5;
 
         hitDelay = 1;
 
-        if(player == null)
+        if (player == null)
         {
             player = gameObject;
         }
 
-        if(attackZone == null)
+        if (attackZone == null)
         {
             attackZone = player.transform.GetChild(0).gameObject;
         }
     }
 
-    virtual protected void Update()
+    virtual protected void FixedUpdate()
     {
         Hit(damage, hitDelay);
     }
@@ -62,32 +63,37 @@ public abstract class BaseHit : MonoBehaviour
         {
             if (canHit)
             {
+
                 DoItBeforeHit();
-                HitLogic(damage);
-                DoItAfterHit();
-                StartCoroutine(HitDelay(hitDelay));
+
+                attackZoneColliders = attackZone.GetComponent<AttrackZone>().Colliders;
+
+                if(attackZoneColliders != null)
+                if (attackZoneColliders.Count != 0)
+                {
+                    HitLogic(damage);
+                    DoItAfterHit();
+                    StartCoroutine(HitDelay(hitDelay));
+                }
             }
         }
     }
 
     virtual protected void HitLogic(float damage)
     {
-        if (colliders.Count != 0)
+        for (int i = attackZoneColliders.Count - 1; i == 0; i--)
         {
-            for (int i = colliders.Count - 1; i == 0; i--)
+            if (attackZoneColliders[i] == null)
             {
-                if (colliders[i] == null)
+                attackZoneColliders.Remove(attackZoneColliders[i]);
+            }
+            else
+            {
+                attackZoneColliders[i].gameObject.GetComponent<HP>().TakingDamage(damage);
+                if (attackZoneColliders[i].gameObject.GetComponent<HP>()._HP <= 0)
                 {
-                    colliders.Remove(colliders[i]);
-                }
-                else
-                {
-                    colliders[i].gameObject.GetComponent<HP>().TakingDamage(damage);
-                    if (colliders[i].gameObject.GetComponent<HP>()._HP <= 0)
-                    {
-                        colliders[i].gameObject.GetComponent<HP>().Death();
-                        colliders.Remove(colliders[i]);
-                    }
+                    attackZoneColliders[i].gameObject.GetComponent<HP>().Death();
+                    attackZoneColliders.Remove(attackZoneColliders[i]);
                 }
             }
         }
@@ -101,14 +107,14 @@ public abstract class BaseHit : MonoBehaviour
         canHit = true;
     }
 
-    protected virtual void OnTriggerEnter(Collider other)
-    {
-        colliders.Add(other);
-    }
+    //protected virtual void OnTriggerEnter(Collider other)
+    //{
+    //    colliders.Add(other);
+    //}
 
-    protected virtual void OnTriggerExit(Collider other)
-    {
-        colliders.Remove(other);
-    }
+    //protected virtual void OnTriggerExit(Collider other)
+    //{
+    //    colliders.Remove(other);
+    //}
 }
 

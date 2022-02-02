@@ -24,10 +24,10 @@ public class HP : MonoBehaviour
     {
         hP = hP - damage;
         Debug.Log("hitIsTaken");
-        if (_HP <= 0)
-        {
-            Death();
-        }
+        //if (_HP <= 0)
+        //{
+        //    Death();
+        //}
     }
     public void Death()
     {
