@@ -41,7 +41,7 @@ public abstract class BaseHit : MonoBehaviour
 
         if (player == null)
         {
-            GameObject.FindGameObjectWithTag("Player");
+            player = GameObject.FindGameObjectWithTag("Player");
         }
 
         if (attackZone == null)

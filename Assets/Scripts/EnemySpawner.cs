@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField]
-    GameObject enemy = null;
+    GameObject enemy;
 
     [SerializeField]
     float spawnDelay = 0;
@@ -15,7 +15,9 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        if(spawnDelay <= 0)
+        enemy = Resources.Load<GameObject>("TestEnemy");
+
+        if (spawnDelay <= 0)
         {
             spawnDelay = 1;
         }
@@ -44,7 +46,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Spawn()
     {
-        GameObject.Instantiate<GameObject>(enemy);
+        GameObject.Instantiate<GameObject>(enemy, gameObject.transform.position, gameObject.transform.rotation);
     }
 
 }
