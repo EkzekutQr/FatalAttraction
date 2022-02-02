@@ -28,13 +28,9 @@ public class FatalAttraction : BaseHit
 
         if (goBlinkDistance == null)
         {
-            for (int i = gameObject.transform.childCount - 1; i >= 0; i--)
-            {
-                if (gameObject.transform.GetChild(i).name == "BlinkDistance")
-                {
-                    goBlinkDistance = gameObject.transform.GetChild(i).gameObject;
-                }
-            }
+
+            goBlinkDistance = GetChild("BlinkDistance");
+
         }
     }
 
@@ -47,6 +43,8 @@ public class FatalAttraction : BaseHit
 
     private void Blink()
     {
+        goBlinkDistance.GetComponent<BlinkDistance>().CollidersCheck();
+
         blinkDistanceColliders = goBlinkDistance.GetComponent<BlinkDistance>().Colliders;
 
         Collider randomCollider;
@@ -87,8 +85,6 @@ public class FatalAttraction : BaseHit
     {
 
         Vector3 position;
-
-        Vector3 oldPosition;
 
         #region old
         //int[] num = new int[2];

@@ -23,28 +23,38 @@ public abstract class BaseHit : MonoBehaviour
     [SerializeField]
     protected GameObject attackZone;
 
+    [SerializeField]
+    protected List<GameObject> childs;
 
+    [SerializeField]
+    bool needPushOnKey = true;
 
     virtual protected void Start()
     {
+        if(damage == 0)
         damage = 5;
-
+        
+        if(hitDelay == 0)
         hitDelay = 1;
+
+        GetAllChilds();
 
         if (player == null)
         {
-            player = gameObject;
+            GameObject.FindGameObjectWithTag("Player");
         }
 
         if (attackZone == null)
         {
-            attackZone = player.transform.GetChild(0).gameObject;
+
+            attackZone = GetChild("AttackZone");
+
         }
     }
 
     virtual protected void FixedUpdate()
     {
-        Hit(damage, hitDelay);
+        Hit(damage, hitDelay, needPushOnKey);
     }
 
     virtual protected void DoItBeforeHit()
@@ -57,25 +67,47 @@ public abstract class BaseHit : MonoBehaviour
 
     }
 
-    virtual protected void Hit(float damage, float hitDelay)
+    virtual protected void Hit(float damage, float hitDelay, bool needPushOnKey)
     {
-        if (Input.GetKey(KeyCode.F))
+        if (needPushOnKey)
+        {
+            if (Input.GetKey(KeyCode.F))
+            {
+                if (canHit)
+                {
+
+                    DoItBeforeHit();
+
+                    attackZoneColliders = attackZone.GetComponent<AttackZone>().Colliders;
+
+                    if (attackZoneColliders != null)
+                        if (attackZoneColliders.Count != 0)
+                        {
+                            HitLogic(damage);
+                            DoItAfterHit();
+                            StartCoroutine(HitDelay(hitDelay));
+                        }
+                }
+            }
+        }
+        else
         {
             if (canHit)
             {
 
                 DoItBeforeHit();
 
-                attackZoneColliders = attackZone.GetComponent<AttrackZone>().Colliders;
+                attackZoneColliders = attackZone.GetComponent<AttackZone>().Colliders;
 
-                if(attackZoneColliders != null)
-                if (attackZoneColliders.Count != 0)
-                {
-                    HitLogic(damage);
-                    DoItAfterHit();
-                    StartCoroutine(HitDelay(hitDelay));
-                }
+                if (attackZoneColliders != null)
+                    if (attackZoneColliders.Count != 0)
+                    {
+                        HitLogic(damage);
+                        DoItAfterHit();
+                        StartCoroutine(HitDelay(hitDelay));
+                    }
             }
+
         }
     }
 
@@ -107,6 +139,59 @@ public abstract class BaseHit : MonoBehaviour
         canHit = true;
     }
 
+    virtual protected void GetAllChilds()
+    {
+
+        for (int i = gameObject.transform.childCount - 1; i >= 0; i--)
+        {
+            Debug.Log(gameObject.transform.childCount);
+
+            childs.Add(gameObject.transform.GetChild(i).gameObject);
+
+        }
+    }
+
+    virtual protected GameObject GetChild(string childName)
+    {
+        GameObject currentChild = null;
+
+        if (childs != null)
+        {
+            if (childs.Count != 0)
+            {
+                foreach (GameObject gameObject in childs)
+                {
+                    if (gameObject.name == childName)
+                    {
+                        currentChild = gameObject;
+                        break;
+                    }
+                    else
+                    {
+                        currentChild = null;
+                    }
+                }
+                if (currentChild != null)
+                {
+                    return currentChild;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+        }
+        else
+        {
+            return null;
+        }
+
+    }
+
     //protected virtual void OnTriggerEnter(Collider other)
     //{
     //    colliders.Add(other);
@@ -116,5 +201,18 @@ public abstract class BaseHit : MonoBehaviour
     //{
     //    colliders.Remove(other);
     //}
+
+    public virtual List<Collider> AttackZoneColliders
+    {
+        get
+        {
+            return attackZoneColliders;
+        }
+        protected set
+        {
+
+        }
+    }
+
 }
 

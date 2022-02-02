@@ -23,7 +23,18 @@ public class BlinkDistance : MonoBehaviour
             colliders.Remove(other);
         }
     }
+    public void CollidersCheck()
+    {
+        foreach (Collider collider in colliders)
+        {
+            Debug.Log(collider);
 
+            if (collider == null)
+            {
+                colliders.Remove(collider);
+            }
+        }
+    }
     public List<Collider> Colliders
     {
         get
