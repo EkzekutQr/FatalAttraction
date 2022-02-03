@@ -62,9 +62,11 @@ public class EnemyMove : MonoBehaviour
 
         moveDirection = player.transform.position - gameObject.transform.position;
 
-        moveDirection = new Vector3(moveDirection.x, rb.velocity.y, moveDirection.z);
+        moveDirection = new Vector3(moveDirection.x, 0, moveDirection.z);
 
-        rb.velocity = moveDirection.normalized * speed;
+        rb.AddForce((moveDirection.normalized * speed), ForceMode.Force);
+
+        rb.velocity = rb.velocity - new Vector3(rb.velocity.x * 0.1f, 0, rb.velocity.z * 0.1f);
     }
 
 

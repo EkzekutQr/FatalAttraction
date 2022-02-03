@@ -7,7 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     [SerializeField]
 
-    private float speed = 10f;
+    private float speed = 100f;
 
     [SerializeField]
 
@@ -25,12 +25,7 @@ public class PlayerController : MonoBehaviour
         if(currentAbility == null)
         {
             currentAbility = new FatalAttraction();
-
-            //if(new FatalAttraction() is BaseHit)
-            //currentAbility = new FatalAttraction();
         }
-
-        //Debug.Log(currentAbility.GetType().Name);
 
         rb = GetComponent<Rigidbody>();
     }
@@ -51,68 +46,169 @@ public class PlayerController : MonoBehaviour
 
     private void MovementLogic()
     {
-
+        #region old move
         //Перемещение по горизонтали
 
-        if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.A)) //Остановка движения если нажаты обе кнопки
-        {
-            moveHorizontal = moveHorizontal * 0.9f;
-        }
+        //if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.A)) //Остановка движения если нажаты обе кнопки
+        //{
+        //    moveHorizontal = moveHorizontal * 0.9f;
+        //}
 
-        else if (Input.GetKey(KeyCode.D))                       //Движение вправо
-        {
-            if (moveHorizontal != 1 && moveHorizontal < 1)
-                moveHorizontal = moveHorizontal + accelerate;   //Плавное ускорение движения
+        //else if (Input.GetKey(KeyCode.D))                       //Движение вправо
+        //{
+        //    if (moveHorizontal != 1 && moveHorizontal < 1)
+        //        moveHorizontal = moveHorizontal + accelerate;   //Плавное ускорение движения
 
-            gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
-        }
+        //    gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
+        //}
 
-        else if (Input.GetKey(KeyCode.A))                       //Движение влево
-        {
-            if (moveHorizontal != -1 && moveHorizontal > -1)
-                moveHorizontal = moveHorizontal - accelerate;   //Плавное ускорение движения
+        //else if (Input.GetKey(KeyCode.A))                       //Движение влево
+        //{
+        //    if (moveHorizontal != -1 && moveHorizontal > -1)
+        //        moveHorizontal = moveHorizontal - accelerate;   //Плавное ускорение движения
 
-            gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
-        }
+        //    gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
+        //}
 
-        else
-        {
-            if (_isGrounded)
-                moveHorizontal = moveHorizontal * 0.9f;             //Остановка движения если ни одна кнопка не нажата
-        }
+        //else
+        //{
+        //    if (_isGrounded)
+        //        moveHorizontal = moveHorizontal * 0.9f;             //Остановка движения если ни одна кнопка не нажата
+        //}
 
-        //Перемещение по вертикали
+        ////Перемещение по вертикали
+
+        //if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
+        //{
+        //    moveVertical = moveVertical * 0.9f;
+        //}
+
+        //else if (Input.GetKey(KeyCode.W))
+        //{
+        //    if (moveVertical != 1 && moveVertical < 1)
+        //        moveVertical = moveVertical + accelerate;
+
+        //    gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
+        //}
+
+        //else if (Input.GetKey(KeyCode.S))
+        //{
+        //    if (moveVertical != -1 && moveVertical > -1)
+        //        moveVertical = moveVertical - accelerate;
+
+        //    gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
+        //}
+
+        //else
+        //{
+        //    if (_isGrounded)
+        //        moveVertical = moveVertical * 0.9f;
+        //}
+
+        //Движение в направление вектора
+
+        //rb.velocity = new Vector3(moveHorizontal * speed, rb.velocity.y, moveVertical * speed);
+
+
+
+        //float magnitude = rb.velocity.magnitude;
+
+        //float accelerateMagnitude;
+
+        //if (magnitude < speed)
+        //{
+        //    accelerateMagnitude = speed - magnitude;
+        //}
+        //else
+        //{
+        //    accelerateMagnitude = 0;
+        //}
+
+        //rb.AddForce(new Vector3(moveHorizontal / accelerateMagnitude, 0, moveVertical / accelerateMagnitude).normalized);
+        #endregion
+
+        Vector3 moveDirection;
 
         if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
         {
-            moveVertical = moveVertical * 0.9f;
+            moveVertical = 0;
         }
 
         else if (Input.GetKey(KeyCode.W))
         {
-            if (moveVertical != 1 && moveVertical < 1)
-                moveVertical = moveVertical + accelerate;
+            if (rb.velocity.z <= speed)
+            {
+                moveVertical = 1;
+            }
 
-            gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
+            else
+            {
+                moveVertical = 0;
+            }
         }
 
         else if (Input.GetKey(KeyCode.S))
         {
-            if (moveVertical != -1 && moveVertical > -1)
-                moveVertical = moveVertical - accelerate;
+            if (rb.velocity.z >= speed * -1)
+            {
+                moveVertical = -1;
+            }
 
-            gameObject.transform.LookAt(new Vector3(gameObject.transform.position.x + moveHorizontal, gameObject.transform.position.y, gameObject.transform.position.z + moveVertical));
+            else
+            {
+                moveVertical = 0;
+            }
         }
 
         else
         {
-            if (_isGrounded)
-                moveVertical = moveVertical * 0.9f;
+            moveVertical = 0;
         }
 
-        //Движение в направление вектора
+        if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.A))
+        {
+            moveHorizontal = 0;
+        }
 
-        rb.velocity = new Vector3(moveHorizontal * speed, rb.velocity.y, moveVertical * speed);
+        else if (Input.GetKey(KeyCode.D))
+        {
+            if (rb.velocity.x <= speed)
+            {
+                moveHorizontal = 1;
+            }
+
+            else
+            {
+                moveHorizontal = 0;
+            }
+        }
+
+        else if (Input.GetKey(KeyCode.A))
+        {
+            if (rb.velocity.x >= speed * -1)
+            {
+                moveHorizontal = -1;
+            }
+
+            else
+            {
+                moveHorizontal = 0;
+            }
+        }
+
+        else
+        {
+            moveHorizontal = 0;
+        }
+
+        moveDirection = new Vector3(moveHorizontal, 0, moveVertical);
+
+        rb.AddForce(moveDirection.normalized * speed, ForceMode.Force);
+
+        rb.velocity = rb.velocity - new Vector3(rb.velocity.x * 0.1f, 0, rb.velocity.z * 0.1f);
+
+        transform.LookAt(transform.position + new Vector3(rb.velocity.x, 0, rb.velocity.z));
+
 
     }
 
