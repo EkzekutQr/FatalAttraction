@@ -24,13 +24,15 @@ public abstract class BaseHit : MonoBehaviour
     protected GameObject attackZone;
 
     [SerializeField]
-    protected List<GameObject> childs;
+    protected List<GameObject> childs = new List<GameObject>();
 
     [SerializeField]
     bool needPushOnKey = true;
 
     virtual protected void Start()
     {
+
+
         if(damage == 0)
         damage = 5;
         
@@ -141,6 +143,7 @@ public abstract class BaseHit : MonoBehaviour
 
     virtual protected void GetAllChilds()
     {
+        childs.Clear();
 
         for (int i = gameObject.transform.childCount - 1; i >= 0; i--)
         {

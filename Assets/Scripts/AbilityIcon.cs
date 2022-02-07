@@ -6,18 +6,17 @@ using UnityEngine.UI;
 public class AbilityIcon : MonoBehaviour
 {
     [SerializeField]
+    string keyCodeIndex;
+
+    [SerializeField]
     string abilityName;
 
     [SerializeField]
     GameObject player;
 
-    string text;
-    int _text;
-
     private void Start()
     {
-        text = gameObject.GetComponentInChildren<Text>().text;
-        _text = int.Parse(text);
+
     }
 
     private void Update()
@@ -27,7 +26,7 @@ public class AbilityIcon : MonoBehaviour
 
     private void AcivateAbility()
     {
-        if (Input.GetKeyDown((KeyCode)_text))
+        if (Input.GetKeyDown((KeyCode)int.Parse(keyCodeIndex)))
         player.GetComponent<PlayerController>().SelectAbility(abilityName);
     }
 

@@ -17,9 +17,6 @@ public class FatalAttraction : BaseHit
     [SerializeField]
     List<Collider> blinkDistanceColliders;
 
-    [SerializeField]
-    int colliderNumber;
-
     protected override void Start()
     {
         base.Start();
@@ -74,8 +71,6 @@ public class FatalAttraction : BaseHit
         int randomCollider;
 
         randomCollider = Random.Range(0, blinkDistanceColliders.Count);
-
-        colliderNumber = randomCollider;
 
         return blinkDistanceColliders[randomCollider];
 

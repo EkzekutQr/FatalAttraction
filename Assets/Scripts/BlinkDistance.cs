@@ -25,7 +25,7 @@ public class BlinkDistance : MonoBehaviour
     }
     public void CollidersCheck()
     {
-        foreach (Collider collider in colliders)
+        foreach (Collider collider in colliders.ToArray())
         {
             Debug.Log(collider);
 
