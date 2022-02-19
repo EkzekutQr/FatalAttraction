@@ -7,9 +7,13 @@ public class Menu : MonoBehaviour
 
     bool pause;
 
+    bool playerAlive = true;
+
     GameObject abilityBoard;
 
     GameObject menuBoard;
+
+    GameObject player;
 
     private void Start()
     {
@@ -19,18 +23,31 @@ public class Menu : MonoBehaviour
 
         menuBoard = GameObject.Find("MenuBoard");
 
+        player = GameObject.Find("Player");
+
         menuBoard.SetActive(false);
+
+        player.GetComponent<PlayerHP>().OnPlayerDeath += PlayerDeathMenu;
+    }
+    public void PlayerDeathMenu()
+    {
+        Pause();
+        GameMenu();
+        playerAlive = false;
     }
     public void Pause()
     {
-        pause = !pause;
-        if (pause)
+        if (playerAlive)
         {
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1;
+            pause = !pause;
+            if (pause)
+            {
+                Time.timeScale = 0;
+            }
+            else
+            {
+                Time.timeScale = 1;
+            }
         }
     }
     public void GameMenu()

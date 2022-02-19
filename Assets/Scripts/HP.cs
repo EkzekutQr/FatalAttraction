@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HP : MonoBehaviour
+public abstract class HP : MonoBehaviour
 {
     [SerializeField]
+    protected float hP = 10;
 
-    private float hP = 10;
-
-    public float _HP
+    public virtual float _HP
     {
         get
         {
@@ -16,11 +15,11 @@ public class HP : MonoBehaviour
         }
         private set { }
     }
-    void Start()
+    protected virtual void Start()
     {
 
     }
-    public void TakingDamage(float damage)
+    public virtual void TakingDamage(float damage)
     {
         hP = hP - damage;
         Debug.Log("hitIsTaken");
@@ -29,7 +28,7 @@ public class HP : MonoBehaviour
         //    Death();
         //}
     }
-    public void Death()
+    public virtual void Death()
     {
         Debug.Log(gameObject.name + "Dead");
         Destroy(gameObject);

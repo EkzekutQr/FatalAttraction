@@ -66,6 +66,8 @@
     <Compile Include="Assets\Scripts\Menu.cs" />
     <Compile Include="Assets\Scripts\EnemySpawner.cs" />
     <Compile Include="Assets\Scripts\CameraTracking.cs" />
+    <Compile Include="Assets\Scripts\PlayerHP.cs" />
+    <Compile Include="Assets\Scripts\EnemyHP.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
