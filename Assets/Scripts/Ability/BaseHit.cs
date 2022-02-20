@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class BaseHit : MonoBehaviour
+public abstract class BaseHit : MonoBehaviour, IAbility
 {
     [SerializeField]
     protected float damage;
@@ -29,15 +29,15 @@ public abstract class BaseHit : MonoBehaviour
     [SerializeField]
     bool needPushOnKey = true;
 
-    virtual protected void Start()
+    protected virtual void Start()
     {
 
 
-        if(damage == 0)
-        damage = 5;
-        
-        if(hitDelay == 0)
-        hitDelay = 1;
+        if (damage == 0)
+            damage = 5;
+
+        if (hitDelay == 0)
+            hitDelay = 1;
 
         GetAllChilds();
 
@@ -54,22 +54,22 @@ public abstract class BaseHit : MonoBehaviour
         }
     }
 
-    virtual protected void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
         Hit(damage, hitDelay, needPushOnKey);
     }
 
-    virtual protected void DoItBeforeHit()
+    public virtual void DoItBeforeHit()
     {
 
     }
 
-    virtual protected void DoItAfterHit()
+    public virtual void DoItAfterHit()
     {
 
     }
 
-    virtual protected void Hit(float damage, float hitDelay, bool needPushOnKey)
+    public void Hit(float damage, float hitDelay, bool needPushOnKey)
     {
         if (needPushOnKey)
         {
@@ -141,7 +141,7 @@ public abstract class BaseHit : MonoBehaviour
         canHit = true;
     }
 
-    virtual protected void GetAllChilds()
+    protected void GetAllChilds()
     {
         childs.Clear();
 
@@ -150,11 +150,10 @@ public abstract class BaseHit : MonoBehaviour
             Debug.Log(gameObject.transform.childCount);
 
             childs.Add(gameObject.transform.GetChild(i).gameObject);
-
         }
     }
 
-    virtual protected GameObject GetChild(string childName)
+    protected GameObject GetChild(string childName)
     {
         GameObject currentChild = null;
 
@@ -174,14 +173,9 @@ public abstract class BaseHit : MonoBehaviour
                         currentChild = null;
                     }
                 }
-                if (currentChild != null)
-                {
-                    return currentChild;
-                }
-                else
-                {
-                    return null;
-                }
+
+                return currentChild;
+
             }
             else
             {
@@ -216,6 +210,5 @@ public abstract class BaseHit : MonoBehaviour
 
         }
     }
-
 }
 

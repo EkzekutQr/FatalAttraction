@@ -17,10 +17,10 @@ public class PlayerController : MonoBehaviour
     private bool _isGrounded;
     Rigidbody rb;
 
-    BaseHit currentAbility;
+    IAbility currentAbility;
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         if(currentAbility == null)
         {
@@ -39,8 +39,6 @@ public class PlayerController : MonoBehaviour
     private float moveHorizontal = 0;
 
     private float moveVertical = 0;
-
-    private Vector3 movement = new Vector3(0, 0, 0);
 
     private float accelerate = 0.1f;
 
@@ -129,10 +127,14 @@ public class PlayerController : MonoBehaviour
 
         Vector3 moveDirection;
 
+        //Запрет движения, если нажаты кнопки для движения в разные стороны
+
         if (Input.GetKey(KeyCode.W) && Input.GetKey(KeyCode.S))
         {
             moveVertical = 0;
         }
+
+        //Движение вверх
 
         else if (Input.GetKey(KeyCode.W))
         {
@@ -146,6 +148,8 @@ public class PlayerController : MonoBehaviour
                 moveVertical = 0;
             }
         }
+
+        //Движение вниз
 
         else if (Input.GetKey(KeyCode.S))
         {
@@ -165,10 +169,14 @@ public class PlayerController : MonoBehaviour
             moveVertical = 0;
         }
 
+        //Запрет движения, если нажаты кнопки для движения в разные стороны
+
         if (Input.GetKey(KeyCode.D) && Input.GetKey(KeyCode.A))
         {
             moveHorizontal = 0;
         }
+
+        //Движение вправо
 
         else if (Input.GetKey(KeyCode.D))
         {
@@ -182,6 +190,8 @@ public class PlayerController : MonoBehaviour
                 moveHorizontal = 0;
             }
         }
+
+        //Движение влево
 
         else if (Input.GetKey(KeyCode.A))
         {
@@ -205,7 +215,7 @@ public class PlayerController : MonoBehaviour
 
         rb.AddForce(moveDirection.normalized * speed, ForceMode.Force);
 
-        rb.velocity = rb.velocity - new Vector3(rb.velocity.x * 0.1f, 0, rb.velocity.z * 0.1f);
+        rb.velocity = rb.velocity - new Vector3(rb.velocity.x * accelerate, 0, rb.velocity.z * accelerate);
 
         transform.LookAt(transform.position + new Vector3(rb.velocity.x, 0, rb.velocity.z));
 
@@ -265,6 +275,10 @@ public class PlayerController : MonoBehaviour
 
                 break;
         }
+    }
+    private void SwitchAbility()
+    {
+
     }
 }
 
